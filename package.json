@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "watch": "nodemon ./index.js localhost 8080",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Fatik",
@@ -14,7 +14,7 @@
     "body-parser": "^2.2.2",
     "cors": "^2.8.5",
     "dotenv": "^17.4.2",
-    "express": "^5.2.1",
+    "express": "^4.18.2",
     "mongoose": "^9.4.1"
   },
   "devDependencies": {

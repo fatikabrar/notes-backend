@@ -19,10 +19,10 @@ app.use(cors());
 
 // ✅ ROUTES
 console.log("LOADING ROUTES...");
-const notesrouter = require("./api/v1/notes"); // ✅ FIXED PATH
+// const notesrouter = require("./api/v1/notes"); // ✅ FIXED PATH
 // 🔥 TEMP: do NOT mount real router yet
 app.use("/api/v1/notes", (req, res) => {
-  res.send("ROUTE WORKING");
+  res.send("ROUTE WORKING"); 
 });
 console.log("ROUTES LOADED");
 

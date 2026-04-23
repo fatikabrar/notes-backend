@@ -3,71 +3,125 @@ const notesrouter = express.Router();
 
 const noteModel = require('../../db/models/note.model');
 
-// GET ALL NOTES
-notesrouter.get("/", (request, response) => {
-    noteModel.find({}).then((notes) => {
-        response.json({
+
+// 🔹 GET ALL NOTES
+notesrouter.get("/", async (req, res) => {
+    try {
+        const notes = await noteModel.find({});
+        res.json({
             listofnotes: notes
         });
-    });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            error: "Failed to fetch notes"
+        });
+    }
 });
 
-// ADD A NOTE
-notesrouter.post("/", (request, response) => {
-    console.log(request.body);
-    const newnote = new noteModel(request.body);
-    newnote.save().then((savedNote) => {
-        response.json({
+
+// 🔹 ADD A NOTE
+notesrouter.post("/", async (req, res) => {
+    try {
+        const newnote = new noteModel(req.body);
+        const savedNote = await newnote.save();
+
+        res.json({
             note: savedNote,
             success: true
         });
-    });
-});
-
-// GET NOTE BY ID
-notesrouter.get("/:id", (request, response) => {
-    response.json({
-        reply: "note by id successfully"
-    });
-});
-
-// DELETE NOTE BY ID
-notesrouter.delete("/:id", (request, response) => {
-    response.json({
-        reply: "note deleted successfully"
-    });
-});
-
-// UPDATE NOTE BY ID  ← FIXED (No callback)
-notesrouter.put("/:id", (request, response) => {
-    const noteId = request.params.id;
-    const updatedData = request.body;
-
-    noteModel.findByIdAndUpdate(noteId, updatedData, { new: true })
-        .then((updatedNote) => {
-            if (!updatedNote) {
-                return response.status(404).json({
-                    message: "Note not found for updating"
-                });
-            }
-
-            response.json({
-                reply: "note updated by id successfully",
-                note: updatedNote
-            });
-        })
-        .catch((err) => {
-            console.log(err);
-            response.status(500).json({
-                message: "Error updating note"
-            });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            error: "Failed to save note"
         });
+    }
 });
 
-// DUMMY ROUTE
-notesrouter.get("/dummy", (request, response) => {
-    response.json({ text: "dummy" });
+
+// 🔹 DUMMY ROUTE (must be BEFORE :id)
+notesrouter.get("/dummy", (req, res) => {
+    res.json({ text: "dummy" });
 });
+
+
+// 🔹 GET NOTE BY ID
+notesrouter.get("/:id", async (req, res) => {
+    try {
+        const note = await noteModel.findById(req.params.id);
+
+        if (!note) {
+            return res.status(404).json({
+                message: "Note not found"
+            });
+        }
+
+        res.json({
+            note: note
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            error: "Error fetching note"
+        });
+    }
+});
+
+
+// 🔹 UPDATE NOTE BY ID
+notesrouter.put("/:id", async (req, res) => {
+    try {
+        const updatedNote = await noteModel.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+
+        if (!updatedNote) {
+            return res.status(404).json({
+                message: "Note not found for updating"
+            });
+        }
+
+        res.json({
+            message: "Note updated successfully",
+            note: updatedNote
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            error: "Error updating note"
+        });
+    }
+});
+
+
+// 🔹 DELETE NOTE BY ID
+notesrouter.delete("/:id", async (req, res) => {
+    try {
+        const deletedNote = await noteModel.findByIdAndDelete(req.params.id);
+
+        if (!deletedNote) {
+            return res.status(404).json({
+                message: "Note not found for deletion"
+            });
+        }
+
+        res.json({
+            message: "Note deleted successfully",
+            note: deletedNote
+        });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            error: "Error deleting note"
+        });
+    }
+});
+
 
 module.exports = {
     notesrouter

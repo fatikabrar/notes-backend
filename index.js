@@ -17,7 +17,7 @@ app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
-// DB CONNECTION (start separately BEFORE server)
+// DB CONNECTION
 function connectDB() {
   const uri = `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_URL}/${process.env.DATABASE_NAME}?retryWrites=true&w=majority`;
 
@@ -27,18 +27,22 @@ function connectDB() {
   });
 }
 
-// START SERVER ONLY AFTER DB ATTEMPT
-const PORT = process.env.PORT;
+// SAFETY CHECK (IMPORTANT)
+if (!process.env.PORT) {
+  console.error("PORT is not defined");
+  process.exit(1);
+}
 
+// START SERVER ONLY AFTER DB
 connectDB()
   .then(() => {
     console.log("MongoDB connected");
 
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log("Server running on port", PORT);
+    app.listen(process.env.PORT, "0.0.0.0", () => {
+      console.log("Server running on port", process.env.PORT);
     });
   })
   .catch((err) => {
     console.error("MongoDB error:", err);
-    process.exit(1); // IMPORTANT for Railway (fail fast)
+    process.exit(1);
   });

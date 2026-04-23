@@ -11,7 +11,7 @@ app.use(cors());
 // ✅ ROUTES
 console.log("LOADING ROUTES...");
 const notesrouter = require("./api/v1/notes"); // ✅ FIXED PATH
-app.use("/api/v1/notes", notesrouter);
+app.use("./api/v1/notes", notesrouter);
 console.log("ROUTES LOADED");
 
 app.get("/", (req, res) => {

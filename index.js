@@ -1,3 +1,12 @@
+process.on("uncaughtException", (err) => {
+  console.error("CRASH:", err);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.error("REJECTION:", err);
+});
+
+
 console.log("App starting...");
 
 const express = require("express");
@@ -16,6 +25,7 @@ app.use("/api/v1/notes", (req, res) => {
   res.send("ROUTE WORKING");
 });
 console.log("ROUTES LOADED");
+
 
 app.get("/", (req, res) => {
   res.send("API is live");

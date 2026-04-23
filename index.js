@@ -9,6 +9,11 @@ app.use(express.json());
 app.use(cors());
 
 // ROUTES
+
+app.get("/debug", (req, res) => {
+  res.send("debug works");
+});
+
 app.get("/", (req, res) => {
   res.send("API is live");
 });

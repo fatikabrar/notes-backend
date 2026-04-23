@@ -11,6 +11,7 @@ app.use(cors());
 // ✅ ROUTES
 console.log("LOADING ROUTES...");
 const notesrouter = require("./routes/notes");
+app.use("/api/v1/notes", notesrouter);
 console.log("ROUTES LOADED");
 
 app.get("/", (req, res) => {

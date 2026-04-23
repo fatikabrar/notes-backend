@@ -1,7 +1,7 @@
 const express = require('express');
 const notesrouter = express.Router();
 
-const noteModel = require('../../db/models/note.model');
+const noteModel = require('../../../db/models/note.model');
 
 
 console.log("NOTES ROUTER LOADED");

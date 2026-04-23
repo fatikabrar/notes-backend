@@ -18,7 +18,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/health", (req, res) => {
-  res.send("OK");
+  res.status(200).send("OK");
 });
 
 // START SERVER FIRST (IMPORTANT FOR RAILWAY)

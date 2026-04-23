@@ -8,7 +8,11 @@ const mongoose = require("mongoose");
 app.use(express.json());
 app.use(cors());
 
-// ROUTES
+// ✅ ROUTES
+const notesrouter = require("./routes/notes");
+app.use("/notes", notesrouter);
+
+// ROOT
 app.get("/", (req, res) => {
   res.send("API is live");
 });
@@ -17,7 +21,7 @@ app.get("/health", (req, res) => {
   res.status(200).send("OK");
 });
 
-// CONNECT DB (separate safe function)
+// DB CONNECT
 function connectDB() {
   const uri = `mongodb+srv://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_URL}/${process.env.DATABASE_NAME}`;
 
@@ -26,13 +30,10 @@ function connectDB() {
     .catch(err => console.error("MongoDB error:", err));
 }
 
-// IMPORTANT: FORCE PORT SAFETY
+// START SERVER
 const PORT = process.env.PORT || 8080;
 
-// START SERVER FIRST (CRITICAL FOR RAILWAY)
 app.listen(PORT, "0.0.0.0", () => {
   console.log("Server running on port", PORT);
-
-  // DB AFTER SERVER STARTS
   connectDB();
 });

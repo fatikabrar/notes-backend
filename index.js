@@ -30,6 +30,6 @@ app.get("/info",(request,response)=>{
 
 })
 
-app.listen(port,()=>{
-    console.log (`notes backend running on ports http://localhost:${port} `);
-})
+app.listen(port, () => {
+  console.log(`notes backend running on port ${port}`);
+});

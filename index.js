@@ -19,8 +19,8 @@ app.get("/", (req, res) => {
 // app.use("/notes", notesrouter);
 
 // IMPORTANT: use Railway PORT correctly
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8080;
 
 app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`);
 });

@@ -5,8 +5,13 @@ const app = express();
 const cors = require("cors");
 const mongoose = require("mongoose");
 
+// Middleware
 app.use(express.json());
 app.use(cors());
+
+// ✅ NOTES ROUTER ADDED (IMPORTANT FIX)
+const notesrouter = require("./routes/notes"); // adjust path if needed
+app.use("/notes", notesrouter);
 
 // ROUTES
 app.get("/", (req, res) => {
@@ -27,7 +32,7 @@ function connectDB() {
   });
 }
 
-// SAFETY CHECK (IMPORTANT)
+// SAFETY CHECK
 if (!process.env.PORT) {
   console.error("PORT is not defined");
   process.exit(1);

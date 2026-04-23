@@ -6,6 +6,12 @@ const noteModel = require("../../db/models/note.model");
 
 console.log("NOTES ROUTER LOADED");
 
+
+// 🔹 DUMMY ROUTE (must be BEFORE :id)
+notesrouter.get("/dummy", (req, res) => {
+    res.json({ text: "dummy" });
+});
+
 // 🔹 GET ALL NOTES
 notesrouter.get("/", async (req, res) => {
     try {
@@ -13,6 +19,29 @@ notesrouter.get("/", async (req, res) => {
         res.json({
             listofnotes: notes
         });
+    } catch (err) {
+  console.error("🔥 REAL MONGO ERROR:", err);
+  res.status(500).json({
+    error: err.message
+  });
+}
+});
+
+// 🔹 GET NOTE BY ID
+notesrouter.get("/:id", async (req, res) => {
+    try {
+        const note = await noteModel.findById(req.params.id);
+
+        if (!note) {
+            return res.status(404).json({
+                message: "Note not found"
+            });
+        }
+
+        res.json({
+            note: note
+        });
+
     } catch (err) {
   console.error("🔥 REAL MONGO ERROR:", err);
   res.status(500).json({
@@ -41,34 +70,10 @@ notesrouter.post("/", async (req, res) => {
 });
 
 
-// 🔹 DUMMY ROUTE (must be BEFORE :id)
-notesrouter.get("/dummy", (req, res) => {
-    res.json({ text: "dummy" });
-});
 
 
-// 🔹 GET NOTE BY ID
-notesrouter.get("/:id", async (req, res) => {
-    try {
-        const note = await noteModel.findById(req.params.id);
 
-        if (!note) {
-            return res.status(404).json({
-                message: "Note not found"
-            });
-        }
 
-        res.json({
-            note: note
-        });
-
-    } catch (err) {
-  console.error("🔥 REAL MONGO ERROR:", err);
-  res.status(500).json({
-    error: err.message
-  });
-}
-});
 
 
 // 🔹 UPDATE NOTE BY ID

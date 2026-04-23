@@ -125,6 +125,4 @@ notesrouter.delete("/:id", async (req, res) => {
 });
 
 
-module.exports = {
-    notesrouter
-};
+module.exports = notesrouter;

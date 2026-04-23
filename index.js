@@ -8,12 +8,11 @@ const mongoose = require("mongoose");
 app.use(express.json());
 app.use(cors());
 
+// ✅ ADD ROUTER HERE
+const notesrouter = require("./routes/notes");
+app.use("/notes", notesrouter);
+
 // ROUTES
-
-app.get("/debug", (req, res) => {
-  res.send("debug works");
-});
-
 app.get("/", (req, res) => {
   res.send("API is live");
 });
@@ -22,13 +21,11 @@ app.get("/health", (req, res) => {
   res.send("OK");
 });
 
-// START SERVER FIRST (IMPORTANT FOR RAILWAY)
+// START SERVER FIRST
 const PORT = process.env.PORT;
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log("Server running on port", PORT);
-
-  // THEN connect DB (non-blocking)
   connectDB();
 });
 

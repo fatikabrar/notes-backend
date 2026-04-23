@@ -8,7 +8,9 @@ const mongoose = require("mongoose");
 app.use(express.json());
 app.use(cors());
 
-// ROUTES
+// ✅ ROUTES
+const notesrouter = require("./routes/notes.js");
+app.use("/notes", notesrouter);
 
 app.get("/", (req, res) => {
   res.send("API is live");

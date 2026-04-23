@@ -9,8 +9,9 @@ app.use(express.json());
 app.use(cors());
 
 // ✅ ROUTES
-const notesrouter = require("./routes/notes.js");
-app.use("/notes", notesrouter);
+console.log("LOADING ROUTES...");
+const notesrouter = require("./routes/notes");
+console.log("ROUTES LOADED");
 
 app.get("/", (req, res) => {
   res.send("API is live");

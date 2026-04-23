@@ -1,39 +1,26 @@
-const express =require('express');
-const  app= express();
-const port = process.env.PORT;
+console.log("App starting...");
+
+const express = require('express');
+const app = express();
 
 const cors = require('cors');
-const  {notesrouter} = require("./api/v1/index");
+const { notesrouter } = require("./api/v1/index");
 
 require("./db");
 
 app.use(express.json());
-
-
-
-
 app.use(cors());
-console.log("App starting...");
-//root(/)
-app.get("/",(request,response)=>{
-    response.send("hello world");
 
-})
-
- 
-
-// app.use("/notes",notesrouter);
-
-app.get("/info",(request,response)=>{
-    const author ={
-        name: "fatik abrar",
-        designation : "coder "
-    }
-    response.json(author);
-
-})
-
-app.listen(port, "0.0.0.0", () => {
-  console.log(`notes backend running on port ${port}`);
+// ROOT
+app.get("/", (req, res) => {
+    res.send("hello world");
 });
 
+app.use("/notes", notesrouter);
+
+// IMPORTANT: use Railway PORT correctly
+const PORT = process.env.PORT;
+
+app.listen(PORT, "0.0.0.0", () => {
+    console.log(`Server running on port ${PORT}`);
+});

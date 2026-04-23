@@ -4,7 +4,7 @@ const express = require('express');
 const app = express();
 
 const cors = require('cors');
-const { notesrouter } = require("./api/v1/index");
+// const { notesrouter } = require("./api/v1/index");
 
 require("./db");
 
@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
     res.send("hello world");
 });
 
-app.use("/notes", notesrouter);
+// app.use("/notes", notesrouter);
 
 // IMPORTANT: use Railway PORT correctly
 const PORT = process.env.PORT;

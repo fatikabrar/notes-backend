@@ -14,11 +14,11 @@ notesrouter.get("/", async (req, res) => {
             listofnotes: notes
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            error: "Failed to fetch notes"
-        });
-    }
+  console.error("🔥 REAL MONGO ERROR:", err);
+  res.status(500).json({
+    error: err.message
+  });
+}
 });
 
 
@@ -33,11 +33,11 @@ notesrouter.post("/", async (req, res) => {
             success: true
         });
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            error: "Failed to save note"
-        });
-    }
+  console.error("🔥 REAL MONGO ERROR:", err);
+  res.status(500).json({
+    error: err.message
+  });
+}
 });
 
 
@@ -63,11 +63,11 @@ notesrouter.get("/:id", async (req, res) => {
         });
 
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            error: "Error fetching note"
-        });
-    }
+  console.error("🔥 REAL MONGO ERROR:", err);
+  res.status(500).json({
+    error: err.message
+  });
+}
 });
 
 
@@ -92,11 +92,11 @@ notesrouter.put("/:id", async (req, res) => {
         });
 
     } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            error: "Error updating note"
-        });
-    }
+  console.error("🔥 REAL MONGO ERROR:", err);
+  res.status(500).json({
+    error: err.message
+  });
+}
 });
 
 
@@ -116,12 +116,12 @@ notesrouter.delete("/:id", async (req, res) => {
             note: deletedNote
         });
 
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({
-            error: "Error deleting note"
-        });
-    }
+    }catch (err) {
+  console.error("🔥 REAL MONGO ERROR:", err);
+  res.status(500).json({
+    error: err.message
+  });
+}
 });
 
 

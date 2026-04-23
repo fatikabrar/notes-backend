@@ -4,6 +4,8 @@ const notesrouter = express.Router();
 const noteModel = require('../../db/models/note.model');
 
 
+console.log("NOTES ROUTER LOADED");
+
 // 🔹 GET ALL NOTES
 notesrouter.get("/", async (req, res) => {
     try {

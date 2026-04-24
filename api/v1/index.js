@@ -1,133 +1,111 @@
 const express = require('express');
-const notesrouter = express.Router();
+const router = express.Router();
+const mongoose = require("mongoose");
 
 const noteModel = require("../../db/models/note.model");
 
-
-console.log("NOTES ROUTER LOADED");
-
-
-// 🔹 DUMMY ROUTE (must be BEFORE :id)
-notesrouter.get("/dummy", (req, res) => {
-    res.json({ text: "dummy" });
+// ✅ TEST ROUTE
+router.get("/test", (req, res) => {
+    res.send("Notes API working");
 });
 
-// 🔹 GET ALL NOTES
-notesrouter.get("/", async (req, res) => {
+
+// ✅ GET ALL NOTES
+router.get("/", async (req, res) => {
     try {
         const notes = await noteModel.find({});
-        res.json({
-            listofnotes: notes
-        });
+        res.json(notes);
     } catch (err) {
-  console.error("🔥 REAL MONGO ERROR:", err);
-  res.status(500).json({
-    error: err.message
-  });
-}
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
-// 🔹 GET NOTE BY ID
-notesrouter.get("/:id", async (req, res) => {
+
+// ✅ GET NOTE BY ID
+router.get("/:id", async (req, res) => {
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: "Invalid ID" });
+    }
+
     try {
-        const note = await noteModel.findById(req.params.id);
+        const note = await noteModel.findById(id);
 
         if (!note) {
-            return res.status(404).json({
-                message: "Note not found"
-            });
+            return res.status(404).json({ message: "Note not found" });
         }
 
-        res.json({
-            note: note
-        });
-
+        res.json(note);
     } catch (err) {
-  console.error("🔥 REAL MONGO ERROR:", err);
-  res.status(500).json({
-    error: err.message
-  });
-}
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 
-// 🔹 ADD A NOTE
-notesrouter.post("/", async (req, res) => {
+// ✅ CREATE NOTE
+router.post("/", async (req, res) => {
     try {
-        const newnote = new noteModel(req.body);
-        const savedNote = await newnote.save();
+        const note = new noteModel(req.body);
+        const saved = await note.save();
 
-        res.json({
-            note: savedNote,
-            success: true
-        });
+        res.json(saved);
     } catch (err) {
-  console.error("🔥 REAL MONGO ERROR:", err);
-  res.status(500).json({
-    error: err.message
-  });
-}
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 
+// ✅ UPDATE NOTE
+router.put("/:id", async (req, res) => {
+    const { id } = req.params;
 
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: "Invalid ID" });
+    }
 
-
-
-
-
-// 🔹 UPDATE NOTE BY ID
-notesrouter.put("/:id", async (req, res) => {
     try {
-        const updatedNote = await noteModel.findByIdAndUpdate(
-            req.params.id,
+        const updated = await noteModel.findByIdAndUpdate(
+            id,
             req.body,
             { new: true }
         );
 
-        if (!updatedNote) {
-            return res.status(404).json({
-                message: "Note not found for updating"
-            });
+        if (!updated) {
+            return res.status(404).json({ message: "Note not found" });
         }
 
-        res.json({
-            message: "Note updated successfully",
-            note: updatedNote
-        });
-
+        res.json(updated);
     } catch (err) {
-  console.error("🔥 REAL MONGO ERROR:", err);
-  res.status(500).json({
-    error: err.message
-  });
-}
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
 
-// 🔹 DELETE NOTE BY ID
-notesrouter.delete("/:id", async (req, res) => {
-    try {
-        const deletedNote = await noteModel.findByIdAndDelete(req.params.id);
+// ✅ DELETE NOTE
+router.delete("/:id", async (req, res) => {
+    const { id } = req.params;
 
-        if (!deletedNote) {
-            return res.status(404).json({
-                message: "Note not found for deletion"
-            });
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ error: "Invalid ID" });
+    }
+
+    try {
+        const deleted = await noteModel.findByIdAndDelete(id);
+
+        if (!deleted) {
+            return res.status(404).json({ message: "Note not found" });
         }
 
-        res.json({
-            message: "Note deleted successfully",
-            note: deletedNote
-        });
-
-    }catch (err) {
-  console.error("🔥 REAL MONGO ERROR:", err);
-  res.status(500).json({
-    error: err.message
-  });
-}
+        res.json({ message: "Deleted successfully" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: err.message });
+    }
 });
 
-
-module.exports = notesrouter;
+module.exports = router;

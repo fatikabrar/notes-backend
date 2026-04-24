@@ -21,7 +21,7 @@ app.get("/health", (req, res) => {
 });
 
 const notesrouter = require("./api/v1"); // ✅ FIXED PATH
-app.use("/api/v1", notesrouter);
+app.use("/api/v1/notes", notesrouter);
 
 // CONNECT DB (separate safe function)
 function connectDB() {

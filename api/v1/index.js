@@ -5,9 +5,9 @@ const mongoose = require("mongoose");
 const noteModel = require("../../db/models/note.model");
 
 // ✅ TEST ROUTE
-router.get("/test", (req, res) => {
-    res.send("Notes API working");
-});
+// router.get("/test", (req, res) => {
+//     res.send("Notes API working");
+// });
 
 
 // ✅ GET ALL NOTES
